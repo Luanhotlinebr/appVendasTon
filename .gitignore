@@ -9,9 +9,9 @@ lerna-debug.log*
 
 node_modules
 dist
-.env
 dist-ssr
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +23,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.netlify
