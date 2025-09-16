@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Auth } from "../../api/auth/auth";
 import { useState } from "react";
 import * as React from "react";
+
 import {
   Alert,
   AlertTitle,
@@ -23,7 +24,11 @@ interface Alert {
   state?: boolean;
 }
 
+import { useNavigate } from "react-router-dom";
+
 export function Login() {
+  let navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState<LoginProps>({
     username: undefined,
@@ -54,6 +59,17 @@ export function Login() {
       .then((res) => {
         console.log(res);
         setAlert({ ...alert, state: false });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            token: res.idToken,
+            refreshToken: res.refreshToken,
+            expiresIn: res.expiresIn,
+            email: res.email,
+          })
+        );
+        navigate("/");
       })
       .catch((error: Error) => {
         setAlert({ message: error.message, type: "error", state: true });

@@ -1,17 +1,25 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { ForgotPassword } from "./pages/RecoveryPassword";
 import { NotFound } from "./pages/NotFound";
 import { RegisterUser } from "./pages/RegisterUser";
-
+import { PrivateRoute } from "./components/PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: (
+      <PrivateRoute>
+        <Home />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/login",
     element: <Login />,
   },
   {
-    path: "/dashboard",
+    path: "/",
     element: <Home />,
   },
   {
