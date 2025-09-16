@@ -22,7 +22,7 @@ export class Auth {
     else if (email) body.email = email;
     else throw new Error("Email ou username são obrigatórios");
 
-    const response = await fetch("/api/login", {
+    const response = await fetch("/api/loginUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -53,7 +53,7 @@ export class Auth {
     const headers: any = { "Content-Type": "application/json" };
     if (adminToken) headers["Authorization"] = `Bearer ${adminToken}`;
 
-    const response = await fetch("/api/register", {
+    const response = await fetch("/api/registerUser", {
       method: "POST",
       headers,
       body: JSON.stringify({ email, password, nome, username, profile }),
@@ -103,9 +103,10 @@ export class Auth {
     return data; // retorna { message: "Usuário atualizado com sucesso." }
   }
   async sendPasswordResetEmail(username?: string, email?: string) {
-    if (!username && !email) throw new Error("Email ou username são obrigatórios");
+    if (!username && !email)
+      throw new Error("Email ou username são obrigatórios");
 
-    const response = await fetch("/api/sendPasswordReset", {
+    const response = await fetch("/api/recoverPassword", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email }),
@@ -119,5 +120,4 @@ export class Auth {
 
     return data; // { message: "E-mail de recuperação enviado com sucesso." }
   }
-
 }
