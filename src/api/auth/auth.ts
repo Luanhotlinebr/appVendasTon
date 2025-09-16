@@ -31,7 +31,7 @@ export class Auth {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || "Erro ao fazer login");
+      throw new Error(data.message || "A senha digitada não confere");
     }
 
     return data; // idToken, refreshToken, expiresIn, localId
