@@ -1,35 +1,35 @@
+import cn from "classnames";
 import { Input } from "./_components/input";
 import LogoForm from "../../assets/logo-jj.webp";
-import { Link } from "react-router-dom";
-import { Auth } from "../../api/auth/auth";
+
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as React from "react";
+
+import { useAuth } from "@/contexts/AuthContext";
 
 import {
   Alert,
   AlertTitle,
   AlertDescription,
-} from "../../components/ui/alert.tsx/index";
-import cn from "classnames";
-const auth = Auth.getInstance();
+} from "../../components/ui/alert.tsx";
+
+// const auth = Auth.getInstance();
+
 interface LoginProps {
   username?: string;
   email?: string;
   password?: string;
 }
-
 interface Alert {
   type?: string;
   message: string;
   state?: boolean;
 }
 
-import { useNavigate } from "react-router-dom";
-
 export function Login() {
-  let navigate = useNavigate();
-
-  const [loading, setLoading] = useState(false);
+  const { login: performLogin, loading } = useAuth();
+  const navigate = useNavigate(); // Chame o hook aqui, dentro do componente
   const [login, setLogin] = useState<LoginProps>({
     username: undefined,
     email: undefined,
@@ -52,32 +52,13 @@ export function Login() {
     }
   };
 
-  async function loginUser(e: LoginProps) {
-    setLoading(true);
-    const data = auth
-      .login(e.username, e.email, e.password)
-      .then((res) => {
-        console.log(res);
-        setAlert({ ...alert, state: false });
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            token: res.idToken,
-            refreshToken: res.refreshToken,
-            expiresIn: res.expiresIn,
-            email: res.email,
-          })
-        );
-        navigate("/");
-      })
-      .catch((error: Error) => {
-        setAlert({ message: error.message, type: "error", state: true });
-        console.log(alert.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  async function handleLogin() {
+    try {
+      setAlert({ ...alert, state: false });
+      await performLogin(navigate, login.username, login.email, login.password);
+    } catch (error: any) {
+      setAlert({ message: error.message, type: "error", state: true });
+    }
   }
 
   return (
@@ -134,7 +115,7 @@ export function Login() {
                 loading,
             }
           )}
-          onClick={() => loginUser(login)}
+          onClick={handleLogin}
           disabled={loading}
         >
           {loading ? "Carregando..." : "Entrar"}
@@ -143,6 +124,7 @@ export function Login() {
     </div>
   );
 }
+
 //       { className={cn(
 //   "px-4 py-2 rounded-md text-white transition-colors",
 //   {
