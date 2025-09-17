@@ -68,7 +68,7 @@ export function Login() {
         <div className="w-full flex flex-col mt-6 gap-2 ">
           {alert.state && (
             <Alert variant={"destructive"}>
-              <AlertTitle>{<h1>Eita!</h1>}</AlertTitle>
+              <AlertTitle>{<h1>Erro!</h1>}</AlertTitle>
               <AlertDescription>{<h1>{alert.message}</h1>}</AlertDescription>
             </Alert>
           )}

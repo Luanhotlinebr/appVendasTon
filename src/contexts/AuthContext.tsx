@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 const authApi = ApiAuth.getInstance();
 
-// Tipos
 interface UserData {
   token: string;
   refreshToken: string;
@@ -37,7 +36,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Função para fazer login
   const login = async (
     navigate: ReturnType<typeof useNavigate>,
     username?: string,
@@ -55,17 +53,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         email: res.email,
       };
 
-      setUser(userData); // Armazena o usuário diretamente no estado
+      setUser(userData);
       navigate("/");
     } finally {
       setLoading(false);
     }
   };
 
-  // Função para fazer logout
   const logout = (navigate: ReturnType<typeof useNavigate>) => {
-    setUser(null); // Limpa o estado do usuário
-    navigate("/login"); // Redireciona para a página de login
+    setUser(null);
+    navigate("/login");
   };
 
   return (
@@ -75,7 +72,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-// Hook personalizado para usar o contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
