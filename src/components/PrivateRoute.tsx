@@ -14,7 +14,7 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
   }
   return (
     <div>
-      <p>Cara de cu</p>
+      <p>Em desenvolvimento</p>
       {children}
     </div>
   );
