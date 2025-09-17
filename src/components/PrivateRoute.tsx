@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { mdiLogout } from "@mdi/js";
 
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./app-sidebar";
+
 interface PrivateRouteProps {
   children: ReactNode;
 }
@@ -22,21 +25,28 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
     return <Navigate to="/login" replace />; // Redireciona para login se não estiver autenticado
   }
   return (
-    <div className="w-full items-center">
-      <div className="flex flex-row space-x-6 p-6 justify-between items-center">
-        <div className="flex flex-row gap-3">
-          <Icon path={mdiAccount} size={1} />
-          <p>Usuário</p>
-        </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="w-full items-center">
+        <div className="flex flex-row space-x-6 p-6 justify-between items-center">
+          <div className="flex  gap-3 mx-2">
+            {/*Side bar icone tem que ficar aqui*/}
+            <div className="flex flex-row cursor-pointer">
+              <SidebarTrigger className="cursor-pointer"></SidebarTrigger>
+              <Icon path={mdiAccount} size={1} className="mx-2" />
+              <p>Usuário</p>
+            </div>
+          </div>
 
-        <button
-          className="bg-transparent  p-3 rounded-md text-white cursor-pointer"
-          onClick={handleLogout}
-        >
-          <Icon path={mdiLogout} size={1} className="text-black" />
-        </button>
+          <button
+            className="bg-transparent  p-3 rounded-md text-white cursor-pointer"
+            onClick={handleLogout}
+          >
+            <Icon path={mdiLogout} size={1} className="text-black" />
+          </button>
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </SidebarProvider>
   );
 }
