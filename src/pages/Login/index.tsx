@@ -63,7 +63,7 @@ export function Login() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#f2f4f7]">
-      <div className="w-full max-w-2xl flex flex-col justify-center items-center p-6 rounded-md shadow-md bg-white">
+      <div className="w-full max-w-3/4 flex flex-col justify-center items-center p-6 rounded-md shadow-md bg-white">
         <img src={LogoForm} loading="lazy" alt="" width={200} />
         <div className="w-full flex flex-col mt-6 gap-2 ">
           {alert.state && (
