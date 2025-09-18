@@ -1,4 +1,4 @@
-import { auth } from "../../config/firebase.config";
+import { auth } from "../config/firebase.config";
 
 export class Auth {
   private static instance: Auth;
