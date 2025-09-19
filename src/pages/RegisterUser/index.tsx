@@ -2,7 +2,7 @@ import { Input } from "../Login/_components/input";
 import Icon from "@mdi/react";
 import { mdiMenuDown } from "@mdi/js";
 import { useState } from "react";
-import { Auth } from "../../api/auth/auth";
+import { Auth } from "../../api/auth";
 
 interface RegisterProps {
   email: string;

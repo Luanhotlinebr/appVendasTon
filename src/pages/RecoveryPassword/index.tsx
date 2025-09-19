@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 // Importe as funções do Firebase SD
 
-import { Auth } from "@/api/auth/auth";
+import { Auth } from "@/api/auth";
 const auth = Auth.getInstance();
 
 const isEmail = (value: string): boolean => {

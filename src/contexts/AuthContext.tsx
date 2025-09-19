@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.tsx
 import { createContext, useState, useContext, type ReactNode } from "react";
-import { Auth as ApiAuth } from "../api/auth/auth";
+import { Auth as ApiAuth } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
 const authApi = ApiAuth.getInstance();
