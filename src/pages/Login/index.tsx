@@ -1,22 +1,26 @@
+import cn from "classnames";
 import { Input } from "./_components/input";
 import LogoForm from "../../assets/logo-jj.webp";
-import { Link } from "react-router-dom";
-import { Auth } from "../../api/auth/auth";
+
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as React from "react";
+
+import { useAuth } from "@/contexts/AuthContext";
+
 import {
   Alert,
   AlertTitle,
   AlertDescription,
-} from "../../components/ui/alert.tsx/index";
-import cn from "classnames";
-const auth = Auth.getInstance();
+} from "../../components/ui/alert.tsx";
+
+// const auth = Auth.getInstance();
+
 interface LoginProps {
   username?: string;
   email?: string;
   password?: string;
 }
-
 interface Alert {
   type?: string;
   message: string;
@@ -24,7 +28,8 @@ interface Alert {
 }
 
 export function Login() {
-  const [loading, setLoading] = useState(false);
+  const { login: performLogin, loading } = useAuth();
+  const navigate = useNavigate(); // Chame o hook aqui, dentro do componente
   const [login, setLogin] = useState<LoginProps>({
     username: undefined,
     email: undefined,
@@ -47,31 +52,23 @@ export function Login() {
     }
   };
 
-  async function loginUser(e: LoginProps) {
-    setLoading(true);
-    const data = auth
-      .login(e.username, e.email, e.password)
-      .then((res) => {
-        console.log(res);
-        setAlert({ ...alert, state: false });
-      })
-      .catch((error: Error) => {
-        setAlert({ message: error.message, type: "error", state: true });
-        console.log(alert.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  async function handleLogin() {
+    try {
+      setAlert({ ...alert, state: false });
+      await performLogin(navigate, login.username, login.email, login.password);
+    } catch (error: any) {
+      setAlert({ message: error.message, type: "error", state: true });
+    }
   }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#f2f4f7]">
-      <div className="w-full max-w-2xl flex flex-col justify-center items-center p-6 rounded-md shadow-md bg-white">
+      <div className="w-full max-w-3/4 flex flex-col justify-center items-center p-6 rounded-md shadow-md bg-white">
         <img src={LogoForm} loading="lazy" alt="" width={200} />
         <div className="w-full flex flex-col mt-6 gap-2 ">
           {alert.state && (
             <Alert variant={"destructive"}>
-              <AlertTitle>{<h1>Eita!</h1>}</AlertTitle>
+              <AlertTitle>{<h1>Erro!</h1>}</AlertTitle>
               <AlertDescription>{<h1>{alert.message}</h1>}</AlertDescription>
             </Alert>
           )}
@@ -118,7 +115,7 @@ export function Login() {
                 loading,
             }
           )}
-          onClick={() => loginUser(login)}
+          onClick={handleLogin}
           disabled={loading}
         >
           {loading ? "Carregando..." : "Entrar"}
@@ -127,6 +124,7 @@ export function Login() {
     </div>
   );
 }
+
 //       { className={cn(
 //   "px-4 py-2 rounded-md text-white transition-colors",
 //   {

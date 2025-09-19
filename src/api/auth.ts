@@ -1,3 +1,4 @@
+
 import { auth } from "../config/firebase.config";
 
 export class Auth {
@@ -102,6 +103,7 @@ export class Auth {
 
     return data; // retorna { message: "Usuário atualizado com sucesso." }
   }
+
   async sendPasswordResetEmail(username?: string, email?: string) {
     if (!username && !email)
       throw new Error("Email ou username são obrigatórios");
