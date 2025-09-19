@@ -1,5 +1,5 @@
-import { auth } from "../../config/firebase.config";
-import { sendPasswordResetEmail } from "firebase/auth";
+
+import { auth } from "../config/firebase.config";
 
 export class Auth {
   private static instance: Auth;
@@ -32,7 +32,7 @@ export class Auth {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || "Erro ao fazer login");
+      throw new Error(data.message || "A senha digitada não confere");
     }
 
     return data; // idToken, refreshToken, expiresIn, localId
@@ -103,18 +103,23 @@ export class Auth {
 
     return data; // retorna { message: "Usuário atualizado com sucesso." }
   }
-  async sendPasswordResetEmail(email: string) {
-    console.log(email);
-    await sendPasswordResetEmail(auth, email)
-      .then(() => {
-        return "Email enviando com sucesso!";
-        // Password reset email sent!
-        // ..
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
+
+  async sendPasswordResetEmail(username?: string, email?: string) {
+    if (!username && !email)
+      throw new Error("Email ou username são obrigatórios");
+
+    const response = await fetch("/api/recoverPassword", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Erro ao enviar e-mail de recuperação");
+    }
+
+    return data; // { message: "E-mail de recuperação enviado com sucesso." }
   }
 }
